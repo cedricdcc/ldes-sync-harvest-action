@@ -1,0 +1,16 @@
+name: 'LDES sync/harvest'
+description: 'This action will create a series of folders containing yml files that are created  from harvesting/syncing with different LDES's based of a given config.yml file
+author: 'Decruw Cedric'
+branding:
+  icon: 'git-branch'
+  color: 'blue'
+inputs:
+  config:
+    description: 'Path to the config file relative to the root of the project'
+    required: true
+    default: './config.yml'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.config }}
