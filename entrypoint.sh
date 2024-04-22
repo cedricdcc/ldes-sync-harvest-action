@@ -11,3 +11,6 @@ echo "repo name is:" GITHUB_REPOSITORY
 rsync --recursive --progress -avzh ./github/workspace/* ./
 
 cd src
+
+# executing the setup.sh script
+bash setup.sh
