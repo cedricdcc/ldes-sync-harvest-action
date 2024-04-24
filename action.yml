@@ -4,13 +4,5 @@ author: 'Decruw Cedric'
 branding:
   icon: 'git-branch'
   color: 'blue'
-inputs:
-  config:
-    description: 'Path to the config file relative to the root of the project'
-    required: true
-    default: './config.yml'
-runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.config }}
