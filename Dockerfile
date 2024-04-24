@@ -18,7 +18,7 @@ COPY pyproject.toml /pyproject.toml
 # install dependencies
 RUN npm install
 RUN pip install poetry
-RUN pip install pyyaml pycountry
+RUN pip install pyyaml pycountry validators pyrdfj2 rdflib
 RUN poetry install --no-root
 
 COPY entrypoint.sh /entrypoint.sh

@@ -9,8 +9,8 @@ if [ ! -d "../ldes" ]; then
     # run the ldes_download.sh script
     bash ldes_download.sh
     # run the ttl to yml python script
-    poetry run python ttl_to_yml.py
+    python ttl_to_yml.py
 else
     # run the ldes_sync.py script
-    poetry run python ldes_sync.py
+    python ldes_sync.py
 fi
