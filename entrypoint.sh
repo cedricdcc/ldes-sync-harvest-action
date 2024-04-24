@@ -5,6 +5,9 @@ ls -al
 
 echo "repo name is:" GITHUB_REPOSITORY
 
+cd ../..
+pwd
+ls -al
 # copy over ./github/workspace/* /*
 rsync --recursive --progress -avzh ./github/workspace/* ./
 
