@@ -33,7 +33,7 @@ jobs:
           ref: "latest"
           # If a description is provided, the action will use it to create an annotated tag. If none is given, the action will create a lightweight tag.
           # Default: ''
-          description: "latest version of the rocrate-to-html."
+          description: "latest version of the ldes-sync-harvest-action."
           # Force-update a branch instead of using a tag.
           # Default: false
           force-branch: true
