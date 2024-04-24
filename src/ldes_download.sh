@@ -29,7 +29,7 @@ python -c "import json; [print(json.dumps(source)) for source in json.loads('$co
     #npm list --depth=0
 
     # CLI command to harvest data from a LDES
-    npx actor-init-ldes-client --pollingInterval 5000 --mimeType text/turtle --emitMemberOnce true --disablePolling true --requestsPerMinute 40 "$source_url" > "../../$source_name/output_ldes_stream.ttl"
+    actor-init-ldes-client --pollingInterval 5000 --mimeType text/turtle --emitMemberOnce true --disablePolling true --requestsPerMinute 40 "$source_url" > "../../$source_name/output_ldes_stream.ttl"
 
     
 done
