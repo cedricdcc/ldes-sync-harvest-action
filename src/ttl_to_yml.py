@@ -8,7 +8,7 @@ import rdflib
 import re
 import json
 
-CONFIG_LOCATION = pathlib.Path(__file__).parent.parent / "../config.yml"
+CONFIG_LOCATION = pathlib.Path(__file__).parent / "../config.yml"
 QUERYBUILDER = J2RDFSyntaxBuilder(
     templates_folder=pathlib.Path(__file__).parent / "templates"
 )
@@ -20,9 +20,7 @@ languages_to_fill = config["target_languages"]
 for source in config["sources"]:
     source_name = source["name"]
     source_path_ttl = (
-        pathlib.Path(__file__).parent.parent
-        / f"../{source_name}"
-        / "output_ldes_stream.ttl"
+        pathlib.Path(__file__).parent / f"../{source_name}" / "output_ldes_stream.ttl"
     )
 
     # Preprocess the ttl file to replace spaces with 'T' in datetime strings -> required for rdflib otherwise it throws an error
@@ -81,7 +79,7 @@ for source in config["sources"]:
         # location file is ../{source_name}/row["identifier"]["value"].yml
 
         with open(
-            pathlib.Path(__file__).parent.parent / f"../{source_name}/{identifier}.yml",
+            pathlib.Path(__file__).parent / f"../{source_name}/{identifier}.yml",
             "w",
             encoding="utf-8",
         ) as f:
