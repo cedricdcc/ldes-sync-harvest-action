@@ -10,11 +10,6 @@ if [ ! -d "../ldes" ]; then
     bash ldes_download.sh
     # run the ttl to yml python script
     python ttl_to_yml.py
-
-    # get the current hash of the repository and write it to a file called last_ldes_hash
-    cd ../github/workspace
-    git rev-parse HEAD > ./.github/last_ldes_hash
-    cd ../../src
 else
     # run the ldes_sync.py script
     python ldes_sync.py
