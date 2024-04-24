@@ -13,6 +13,10 @@ rsync --recursive --progress -avzh ./github/workspace/* ./
 
 cd src
 
+npm install -g @treecg/actor-init-ldes-client
+npm install -g yaml 
+npm list --depth=0
+
 # executing the setup.sh script
 bash setup.sh
 
