@@ -1,6 +1,6 @@
 #!/bin/bash
 
-poetry run python config_validation.py
+python config_validation.py
 if [ $? -ne 0 ]; then
     echo "Config file is not valid. Please check the config file and try again."
     exit 1
