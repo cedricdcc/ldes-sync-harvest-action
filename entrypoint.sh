@@ -35,4 +35,6 @@ bash setup.sh
 # package-lock.json
 # actions.yml
 
+cd ..
+
 rsync --recursive --progress -avzh --exclude='.git' --exclude='.github' --exclude='entrypoint.sh' --exclude='Dockerfile' --exclude='README.md' --exclude='LICENSE' --exclude='.gitignore' --exclude='.dockerignore' --exclude='.env' --exclude='package.json' --exclude='poetry.lock' --exclude='pyproject.toml' --exclude='requirements.txt' --exclude='src' --exclude='package-lock.json' --exclude='action.yml' ./ ./github/workspace/
