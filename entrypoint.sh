@@ -12,6 +12,7 @@ ls -al
 rsync --recursive --progress -avzh ./github/workspace/* ./
 
 cd src
+ls -al
 
 npm install -g @treecg/actor-init-ldes-client
 npm install -g yaml 
