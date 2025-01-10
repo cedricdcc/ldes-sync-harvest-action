@@ -3,9 +3,11 @@
 ls -al
 pwd
 
+cd ..
 # List all remote branches in the repository
 echo "Listing all remote branches in the repository:"
 git branch -r
+cd src
 
 #if [ ! -d "../ldes" ]; then
 #    mkdir "../ldes"
