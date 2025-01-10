@@ -3,8 +3,8 @@ pwd
 
 ls -al
 
-echo "repo name is:" GITHUB_REPOSITORY
-
+echo "repo name is:" $GITHUB_REPOSITORY
+echo "branches are:" $BRANCHES
 cd ../..
 pwd
 ls -al

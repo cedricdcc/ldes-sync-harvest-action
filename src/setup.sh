@@ -1,13 +1,8 @@
 #!/bin/bash
 
-ls -al
-pwd
-
-cd ..
-# List all remote branches in the repository
-echo "Listing all remote branches in the repository:"
-git branch -r
-cd src
+# check if there is a ../.././github/ldes folder in the repository, if not create it
+# Echo the branches
+echo "Branches are: $BRANCHES"
 
 #if [ ! -d "../ldes" ]; then
 #    mkdir "../ldes"
