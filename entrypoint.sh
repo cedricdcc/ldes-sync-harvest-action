@@ -4,7 +4,6 @@ pwd
 ls -al
 
 echo "repo name is:" $GITHUB_REPOSITORY
-echo "branches are:" $BRANCHES
 cd ../..
 pwd
 ls -al
@@ -18,6 +17,11 @@ npm install -g @treecg/actor-init-ldes-client
 npm install -g yaml 
 npm list --depth=0
 
+# list all branches in the repository
+echo "All branches in the repository:"
+BRANCHES=$(git branch -a)
+echo "$BRANCHES"
+
 # executing the setup.sh script
 bash setup.sh
 
@@ -25,6 +29,8 @@ git config --global --add safe.directory /github/workspace
 # set user name and email 
 git config --global user.name 'GitHub Actions'
 git config --global user.email 'actions@github.com'
+
+
 
 # copy over everything in ./ back to ./github/workspace
 # overwrite everything in ./github/workspace
