@@ -13,6 +13,7 @@ FILES_PER_BRANCH = config.get("batch-size", 50)
 
 
 def find_yml_files(folder):
+    print(f"Searching for yml files in {folder}")
     yml_files = []
     for path in folder.rglob("*.yml"):
         yml_files.append(str(path))
@@ -20,6 +21,7 @@ def find_yml_files(folder):
 
 
 def create_branch(branch_name, files):
+    print(f"Creating branch {branch_name} with {len(files)} files")
     subprocess.run(["git", "checkout", "-b", branch_name])
     for file in files:
         subprocess.run(["git", "add", file])

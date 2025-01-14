@@ -11,7 +11,10 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
 else
     # no restricted/ldes branch exists
     # so download must be run
+    echo "Downloading LDES data"
     bash ldes_download.sh
+    echo "Converting TTL to YML"
     python ttl_to_yml.py
+    echo "Making branches"
     python make_branches.py
 fi
