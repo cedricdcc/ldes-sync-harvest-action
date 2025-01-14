@@ -4,7 +4,7 @@
 echo "Branches are: $BRANCHES"
 
 # check if there is a branch called restricted/ldes in the branches
-if [[ $BRANCHES == *"restricted/ldes"* ]]; then
+if [ $BRANCHES == *"restricted/ldes"* ]; then
     # this means that the restricted/ldes branch exists
     # so sync must be run 
     echo "LDES sync branch exists"
