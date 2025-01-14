@@ -17,10 +17,14 @@ npm install -g @treecg/actor-init-ldes-client
 npm install -g yaml 
 npm list --depth=0
 
+cd ..
+cd ./github/workspace
 # list all branches in the repository
 echo "All branches in the repository:"
 BRANCHES=$(git branch -a)
 echo "$BRANCHES"
+cd ../..
+cd src
 
 # executing the setup.sh script
 bash setup.sh
