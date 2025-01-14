@@ -21,6 +21,8 @@ npm list --depth=0
 # executing the setup.sh script
 bash setup.sh
 
+git config --global --add safe.directory /github/workspace
+
 # copy over everything in ./ back to ./github/workspace
 # overwrite everything in ./github/workspace
 # do not copy over the .git folder and the .github folder 
