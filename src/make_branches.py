@@ -4,7 +4,7 @@ from config_validation import load_config
 import pathlib
 
 # Configuration
-FOLDERS_TO_SEARCH = pathlib.Path(__file__).parent
+FOLDERS_TO_SEARCH = pathlib.Path(__file__).parent / "../.github/workspace"
 CONFIG_LOCATION = pathlib.Path(__file__).parent / "../config.yml"
 BRANCH_PREFIX = "batch-"
 
@@ -17,11 +17,14 @@ def find_yml_files(folder):
     yml_files = []
     for path in folder.rglob("*.yml"):
         yml_files.append(str(path))
+    print(f"Found {len(yml_files)} yml files")
     return yml_files
 
 
 def create_branch(branch_name, files):
     print(f"Creating branch {branch_name} with {len(files)} files")
+    os.chdir(FOLDERS_TO_SEARCH)
+    print(f"Current working directory: {os.getcwd()}")
     subprocess.run(["git", "checkout", "-b", branch_name])
     for file in files:
         subprocess.run(["git", "add", file])
