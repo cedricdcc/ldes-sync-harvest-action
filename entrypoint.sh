@@ -49,6 +49,7 @@ cd ..
 
 rsync --recursive --progress -avzhq --exclude=.git --exclude=.github --exclude=.dockerenv --exclude=README.md --exclude=bin --exclude=boot --exclude=config.yml --exclude=dev --exclude=entrypoint.sh --exclude=etc --exclude=github --exclude=home --exclude=lib --exclude=lib64 --exclude=media --exclude=mnt --exclude=opt --exclude=proc --exclude=node_modules --exclude=package-lock.json --exclude=package.json --exclude=poetry.lock --exclude=pyproject.toml --exclude=run --exclude=root --exclude=sbin --exclude=src --exclude=srv --exclude=sys --exclude=tmp --exclude=usr --exclude=var ./ ./github/workspace
 cd ./github/workspace
+
 ls -al
 if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     # this means that the restricted/ldes branch exists
@@ -58,3 +59,12 @@ else
     echo "Making branches"
     python -u ../../src/make_branches.py
 fi
+
+#checkout main branch
+git checkout main
+# add all files
+git add .
+# commit the changes
+git commit -m "Automated commit"
+# push the changes
+git push origin main
