@@ -19,6 +19,10 @@ npm list --depth=0
 
 cd ..
 cd ./github/workspace
+git config --global --add safe.directory /github/workspace
+# set user name and email 
+git config --global user.name 'GitHub Actions'
+git config --global user.email 'actions@github.com'
 # list all branches in the repository
 echo "All branches in the repository:"
 BRANCHES=$(git branch -a)
@@ -29,10 +33,7 @@ cd src
 # executing the setup.sh script
 bash setup.sh
 
-git config --global --add safe.directory /github/workspace
-# set user name and email 
-git config --global user.name 'GitHub Actions'
-git config --global user.email 'actions@github.com'
+
 
 
 
