@@ -1,18 +1,17 @@
 #!/bin/bash
 
-# check if there is a ../.././github/ldes folder in the repository, if not create it
 # Echo the branches
 echo "Branches are: $BRANCHES"
 
-#if [ ! -d "../ldes" ]; then
-#    mkdir "../ldes"
-#    # put a file into the folder so that it is not empty
-#    touch "../ldes/.gitkeep"
-#    # run the ldes_download.sh script
-#    bash ldes_download.sh
-#    # run the ttl to yml python script
-#    python ttl_to_yml.py
-#else
-#    # run the ldes_sync.py script
-#    python ldes_sync.py
-#fi
+# check if there is a branch called restricted/ldes in the branches
+if [[ $BRANCHES == *"restricted/ldes"* ]]; then
+    # this means that the restricted/ldes branch exists
+    # so sync must be run 
+    python ldes_sync.py
+else
+    # no restricted/ldes branch exists
+    # so download must be run
+    bash ldes_download.sh
+    python ttl_to_yml.py
+    python make_branches.py
+fi
