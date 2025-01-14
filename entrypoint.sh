@@ -68,7 +68,7 @@ git commit -m "Syncing with LDES data"
 git push origin main
 
 ls -al
-if [[ $BRANCHES == *"restricted/ldes"* ]]; then
+if [ "$BRANCHES" = *"restricted/ldes"* ]; then
     # this means that the restricted/ldes branch exists
     # so sync must be run 
     echo "LDES sync branch exists"

@@ -7,7 +7,7 @@ echo "Branches are: $BRANCHES"
 if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     # this means that the restricted/ldes branch exists
     # so sync must be run 
-    python ldes_sync.py
+    echo "LDES sync branch exists"
 else
     # no restricted/ldes branch exists
     # so download must be run
