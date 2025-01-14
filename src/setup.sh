@@ -14,7 +14,5 @@ else
     echo "Downloading LDES data"
     bash ldes_download.sh
     echo "Converting TTL to YML"
-    python ttl_to_yml.py
-    echo "Making branches"
-    python make_branches.py
+    python -u ttl_to_yml.py
 fi
