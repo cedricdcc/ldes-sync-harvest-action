@@ -61,6 +61,11 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     # so sync must be run 
     echo "LDES sync branch exists"
 else
+    git checkout -b restricted/ldes
+    git add .
+    git commit -m "Creating restricted/ldes branch"
+    git push origin restricted/ldes
+    git checkout main
     echo "Making branches"
     python -u ../../src/make_branches.py
 fi

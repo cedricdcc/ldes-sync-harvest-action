@@ -24,15 +24,19 @@ def find_yml_files(folder):
     return yml_files
 
 
-def create_branch(branch_name, files):
+def create_branch(branch_name, files, all_files):
     subprocess.run(["git", "checkout", "main"])
     subprocess.run(["git", "reset", "--hard"])
     subprocess.run(["git", "clean", "-fdx"])
 
     subprocess.run(["git", "checkout", "-b", branch_name])
-    for file in files:
-        subprocess.run(["git", "add", file])
-    subprocess.run(["git", "commit", "-m", f"Add {len(files)} yml files"])
+    for file in all_files:
+        if file not in files:
+            os.remove(file)
+            subprocess.run(["git", "rm", file])
+    subprocess.run(
+        ["git", "commit", "-m", f"Remove {len(all_files) - len(files)} yml files"]
+    )
     subprocess.run(["git", "push", "origin", branch_name])
 
 
@@ -40,7 +44,7 @@ def main():
     yml_files = find_yml_files(FOLDERS_TO_SEARCH)
     for i in range(0, len(yml_files), FILES_PER_BRANCH):
         branch_name = f"{BRANCH_PREFIX}{i // FILES_PER_BRANCH + 1}"
-        create_branch(branch_name, yml_files[i : i + FILES_PER_BRANCH])
+        create_branch(branch_name, yml_files[i : i + FILES_PER_BRANCH], yml_files)
 
 
 if __name__ == "__main__":
