@@ -4,11 +4,12 @@ from config_validation import load_config
 import pathlib
 
 # Configuration
-FOLDERS_TO_SEARCH = pathlib.Path(__file__).parent / "../.github/workspace"
+FOLDERS_TO_SEARCH = os.getcwd()
 CONFIG_LOCATION = pathlib.Path(__file__).parent / "../config.yml"
 BRANCH_PREFIX = "batch-"
 
 config = load_config(CONFIG_LOCATION)
+print(f"Loaded config: {config}")
 FILES_PER_BRANCH = config.get("batch-size", 50)
 
 
