@@ -30,7 +30,6 @@ def create_branch(branch_name, files):
         subprocess.run(["git", "add", file])
     subprocess.run(["git", "commit", "-m", f"Add {len(files)} yml files"])
     subprocess.run(["git", "push", "origin", branch_name])
-    subprocess.run(["git", "checkout", "main"])  # Switch back to main branch
 
 
 def main():

@@ -22,6 +22,9 @@ npm list --depth=0
 bash setup.sh
 
 git config --global --add safe.directory /github/workspace
+# set user name and email 
+git config --global user.name 'GitHub Actions'
+git config --global user.email 'actions@github.com'
 
 # copy over everything in ./ back to ./github/workspace
 # overwrite everything in ./github/workspace
