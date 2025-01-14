@@ -25,8 +25,6 @@ def find_yml_files(folder):
 
 
 def create_branch(branch_name, files):
-    subprocess.run("echo Creating branch {branch_name} with {len(files)} files")
-    print(f"Current working directory: {os.getcwd()}")
     subprocess.run(["git", "checkout", "-b", branch_name])
     for file in files:
         subprocess.run(["git", "add", file])
