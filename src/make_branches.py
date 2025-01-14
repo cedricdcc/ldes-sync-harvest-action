@@ -16,8 +16,10 @@ FILES_PER_BRANCH = config.get("batch-size", 50)
 def find_yml_files(folder):
     print(f"Searching for yml files in {folder}")
     yml_files = []
-    for path in folder.rglob("*.yml"):
-        yml_files.append(str(path))
+    for root, dirs, files in os.walk(folder):
+        for file in files:
+            if file.endswith(".yml"):
+                yml_files.append(os.path.join(root, file))
     print(f"Found {len(yml_files)} yml files")
     return yml_files
 
