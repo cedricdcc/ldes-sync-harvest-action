@@ -13,13 +13,26 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     echo "Converting TTL to YML"
     python -u ttl_to_yml.py
     cd .. 
-    rsync --recursive --progress -avzhq --exclude=.git --exclude=.github --exclude=.dockerenv --exclude=README.md --exclude=bin --exclude=boot --exclude=config.yml --exclude=dev --exclude=entrypoint.sh --exclude=etc --exclude=github --exclude=home --exclude=lib --exclude=lib64 --exclude=media --exclude=mnt --exclude=opt --exclude=proc --exclude=node_modules --exclude=package-lock.json --exclude=package.json --exclude=poetry.lock --exclude=pyproject.toml --exclude=run --exclude=root --exclude=sbin --exclude=src --exclude=srv --exclude=sys --exclude=tmp --exclude=usr --exclude=var ./ ./github/workspace
     cd ./github/workspace
     # commit the changes
     git checkout restricted/ldes
+    cd ../..
+    rsync --recursive --progress -avzhq --exclude=.git --exclude=.github --exclude=.dockerenv --exclude=README.md --exclude=bin --exclude=boot --exclude=config.yml --exclude=dev --exclude=entrypoint.sh --exclude=etc --exclude=github --exclude=home --exclude=lib --exclude=lib64 --exclude=media --exclude=mnt --exclude=opt --exclude=proc --exclude=node_modules --exclude=package-lock.json --exclude=package.json --exclude=poetry.lock --exclude=pyproject.toml --exclude=run --exclude=root --exclude=sbin --exclude=src --exclude=srv --exclude=sys --exclude=tmp --exclude=usr --exclude=var ./ ./github/workspace
+    cd ./github/workspace
     git add .
     git commit -m "Syncing with LDES data"
     git push origin restricted/ldes
+    cd ../..
+    # Function to recursively search for all yml files and echo their name and location
+    find_yml_files() {
+        find . -type f -name "*.yml" -print | while read file; do
+            echo "Found YML file: $file"
+        done
+    }
+
+    # Call the function
+    find_yml_files
+    python /src/sync_branches.py
     
 else
     # no restricted/ldes branch exists
