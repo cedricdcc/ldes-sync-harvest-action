@@ -39,20 +39,22 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
         cd ../..
         declare -A file_map
 
-        # Find all yml files and store their paths in an associative array
+        # Find all yml files that start with "http" and store their paths in an associative array
         while IFS= read -r -d '' file; do
             filename=$(basename "$file")
-            if [[ -n "${file_map[$filename]}" ]]; then
-                echo "Duplicate file found: $filename"
-                diff_output=$(diff "${file_map[$filename]}" "$file")
-                if [[ -z "$diff_output" ]]; then
-                    echo "No diff found in duplicate file $filename"
+            if [[ $filename == http* ]]; then
+                if [[ -n "${file_map[$filename]}" ]]; then
+                    echo "Duplicate file found: $filename"
+                    diff_output=$(diff "${file_map[$filename]}" "$file")
+                    if [[ -z "$diff_output" ]]; then
+                        echo "No diff found in duplicate file $filename"
+                    else
+                        echo "Diff found in duplicate file $filename:"
+                        echo "$diff_output"
+                    fi
                 else
-                    echo "Diff found in duplicate file $filename:"
-                    echo "$diff_output"
+                    file_map["$filename"]="$file"
                 fi
-            else
-                file_map["$filename"]="$file"
             fi
         done < <(find . -type f -name "*.yml" -print0)
 
@@ -64,7 +66,7 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
         echo "$BRANCHES" | tr ' ' '\n' | grep 'batch-' | while read branch; do
             echo "Found batch branch: $branch"
             git checkout "$branch"
-            find_yml_files
+            # find_yml_files
             check_duplicate_yml_files
         done
     }
