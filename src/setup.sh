@@ -46,9 +46,7 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
                 if [[ -n "${file_map[$filename]}" ]]; then
                     echo "Duplicate file found: $filename"
                     diff_output=$(diff "${file_map[$filename]}" "$file")
-                    if [[ -z "$diff_output" ]]; then
-                        echo "No diff found in duplicate file $filename"
-                    else
+                    if [[ -n "$diff_output" ]]; then
                         echo "Diff found in duplicate file $filename:"
                         echo "$diff_output"
                     fi
@@ -73,9 +71,6 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
 
     # Call the function
     find_batch_branches
-
-    
-    python /src/sync_branches.py
     
 else
     # no restricted/ldes branch exists
