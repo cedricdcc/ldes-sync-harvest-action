@@ -44,12 +44,27 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
             filename=$(basename "$file")
             if [[ $filename == http* ]]; then
                 if [[ -n "${file_map[$filename]}" ]]; then
-                    echo "Duplicate file found: $filename"
                     diff_output=$(diff "${file_map[$filename]}" "$file")
                     if [[ -n "$diff_output" ]]; then
                         echo "Diff found in duplicate file $filename:"
                         echo "$diff_output"
+                        # Check if the file is in the ./github/workflows directory
+                        if [[ "$file" == ./github/workflows/* ]]; then
+                            # Read the file and update translations if original does not match
+                            while IFS= read -r line; do
+                                if [[ $line == *"original:"* ]]; then
+                                    original_value=$(echo "$line" | awk -F': ' '{print $2}')
+                                    if [[ "$original_value" != "${file_map[$filename]}" ]]; then
+                                        echo "Updating translations for $filename"
+                                        sed -i '/translations:/,/^$/ s/\(.*: \).*/\1""/' "$file"
+                                    fi
+                                fi
+                            done < "$file"
+                        fi
                     fi
+                else
+                    file_map["$filename"]="$file"
+                fi
                 else
                     file_map["$filename"]="$file"
                 fi
