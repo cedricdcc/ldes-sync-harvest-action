@@ -32,6 +32,22 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
 
     # Call the function
     find_yml_files
+    
+    cd ./github/workspace
+
+    # Function to echo all branches that contain batch- in the name
+    find_batch_branches() {
+        echo "$BRANCHES" | tr ' ' '\n' | grep 'batch-' | while read branch; do
+            echo "Found batch branch: $branch"
+            git checkout "$branch"
+            find_yml_files
+        done
+    }
+
+    # Call the function
+    find_batch_branches
+
+    
     python /src/sync_branches.py
     
 else
