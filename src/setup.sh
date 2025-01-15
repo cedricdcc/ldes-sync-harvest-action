@@ -35,12 +35,37 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     
     cd ./github/workspace
 
+    check_duplicate_yml_files() {
+        cd ../..
+        declare -A file_map
+
+        # Find all yml files and store their paths in an associative array
+        while IFS= read -r -d '' file; do
+            filename=$(basename "$file")
+            if [[ -n "${file_map[$filename]}" ]]; then
+                echo "Duplicate file found: $filename"
+                diff_output=$(diff "${file_map[$filename]}" "$file")
+                if [[ -z "$diff_output" ]]; then
+                    echo "No diff found in duplicate file $filename"
+                else
+                    echo "Diff found in duplicate file $filename:"
+                    echo "$diff_output"
+                fi
+            else
+                file_map["$filename"]="$file"
+            fi
+        done < <(find . -type f -name "*.yml" -print0)
+
+        cd ./github/workspace
+    }
+
     # Function to echo all branches that contain batch- in the name
     find_batch_branches() {
         echo "$BRANCHES" | tr ' ' '\n' | grep 'batch-' | while read branch; do
             echo "Found batch branch: $branch"
             git checkout "$branch"
             find_yml_files
+            check_duplicate_yml_files
         done
     }
 
