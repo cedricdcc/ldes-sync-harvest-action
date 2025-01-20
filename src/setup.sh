@@ -33,7 +33,7 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     for branch in $BRANCHES; do
         echo "Checking out branch: $branch"
         git checkout "$branch"
-        git merge restricted/ldes
+        git merge -X theirs restricted/ldes
         git push origin "$branch"
     done
     
