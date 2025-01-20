@@ -47,7 +47,7 @@ def main():
         # open the objects.json file and find the object whose file_name is in the yml_files[i : i + FILES_PER_BRANCH]
         # change the  "branch": "main", to "branch": branch_name
         for obj in objects:
-            if obj["file_name"] in yml_files[i : i + FILES_PER_BRANCH]:
+            if any(obj["file_name"] in yml_file for yml_file in yml_files[i : i + FILES_PER_BRANCH]):
                 obj["branch"] = branch_name
     with open("objects.json", "w") as f:
         json.dump(objects, f, indent=4)
