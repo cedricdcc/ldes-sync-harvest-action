@@ -22,54 +22,20 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     git add .
     git commit -m "Syncing with LDES data"
     git push origin restricted/ldes
-    cd ../..
-    # Function to recursively search for all yml files and echo their name and location
-    find_yml_files() {
-        find . -type f -name "*.yml" -print | while read file; do
-            echo "Found YML file: $file"
-        done
-    }
-
-    # Call the function
-    find_yml_files
     
-    cd ./github/workspace
+    # Get all the different branches in the repo
+    echo "Fetching all branches in the repository"
+    git fetch --all
+    BRANCHES=$(git branch -r | sed 's/origin\///g' | tr '\n' ' ')
+    echo "All branches: $BRANCHES"
 
-    check_duplicate_yml_files() {
-        cd ../..
-        declare -A file_map
-
-        # Find all yml files that start with "http" and store their paths in an associative array
-        while IFS= read -r -d '' file; do
-            filename=$(basename "$file")
-            if [[ $filename == http* ]]; then
-                if [[ -n "${file_map[$filename]}" ]]; then
-                    diff_output=$(diff "${file_map[$filename]}" "$file")
-                    if [[ -n "$diff_output" ]]; then
-                        echo "Diff found in duplicate file $filename:"
-                        echo "$diff_output"
-                        # Check if the file is in the ./github/workflows directory
-                        if [[ "$file" == ./github/workflows/* ]]; then
-                            # Read the file and update translations if original does not match
-                            while IFS= read -r line; do
-                                if [[ $line == *"original:"* ]]; then
-                                    original_value=$(echo "$line" | awk -F': ' '{print $2}')
-                                    if [[ "$original_value" != "${file_map[$filename]}" ]]; then
-                                        echo "Updating translations for $filename"
-                                        sed -i '/translations:/,/^$/ s/\(.*: \).*/\1""/' "$file"
-                                    fi
-                                fi
-                            done < "$file"
-                        fi
-                    fi
-                else
-                    file_map["$filename"]="$file"
-                fi
-            fi
-        done < <(find . -type f -name "*.yml" -print0)
-
-        cd ./github/workspace
-    }
+    # go over each branch and merge the changes
+    for branch in $BRANCHES; do
+        echo "Checking out branch: $branch"
+        git checkout "$branch"
+        git merge restricted/ldes
+        git push origin "$branch"
+    done
 
     # Function to echo all branches that contain batch- in the name
     find_batch_branches() {
