@@ -2,6 +2,7 @@ import os
 import subprocess
 from config_validation import load_config
 import pathlib
+import json
 
 # Configuration
 FOLDERS_TO_SEARCH = os.getcwd()
@@ -18,33 +19,45 @@ def find_yml_files(folder):
     yml_files = []
     for root, dirs, files in os.walk(folder):
         for file in files:
-            if file.endswith(".yml"):
+            if file.endswith(".yml") and file.startswith("http"):
                 yml_files.append(os.path.join(root, file))
     print(f"Found {len(yml_files)} yml files")
     return yml_files
 
 
-def create_branch(branch_name, files, all_files):
+def create_branch(branch_name, files):
     subprocess.run(["git", "checkout", "main"])
     subprocess.run(["git", "reset", "--hard"])
     subprocess.run(["git", "clean", "-fdx"])
 
     subprocess.run(["git", "checkout", "-b", branch_name])
-    for file in all_files:
-        if file not in files:
-            os.remove(file)
-            subprocess.run(["git", "rm", file])
-    subprocess.run(
-        ["git", "commit", "-m", f"Remove {len(all_files) - len(files)} yml files"]
-    )
+    subprocess.run(["git", "commit", "-m", f"made branch with yml files"])
     subprocess.run(["git", "push", "origin", branch_name])
 
 
 def main():
     yml_files = find_yml_files(FOLDERS_TO_SEARCH)
+    # checkout main branch
+    subprocess.run(["git", "checkout", "main"])
+
+    with open("objects.json", "r") as f:
+        objects = json.load(f)
     for i in range(0, len(yml_files), FILES_PER_BRANCH):
         branch_name = f"{BRANCH_PREFIX}{i // FILES_PER_BRANCH + 1}"
-        create_branch(branch_name, yml_files[i : i + FILES_PER_BRANCH], yml_files)
+        # open the objects.json file and find the object whose file_name is in the yml_files[i : i + FILES_PER_BRANCH]
+        # change the  "branch": "main", to "branch": branch_name
+        for obj in objects:
+            if obj["file_name"] in yml_files[i : i + FILES_PER_BRANCH]:
+                obj["branch"] = branch_name
+    with open("objects.json", "w") as f:
+        json.dump(objects, f, indent=4)
+
+    subprocess.run(["git", "add", "objects.json"])
+    subprocess.run(["git", "commit", "-m", "updated objects.json"])
+
+    for i in range(0, len(yml_files), FILES_PER_BRANCH):
+        branch_name = f"{BRANCH_PREFIX}{i // FILES_PER_BRANCH + 1}"
+        create_branch(branch_name, yml_files[i : i + FILES_PER_BRANCH])
 
 
 if __name__ == "__main__":

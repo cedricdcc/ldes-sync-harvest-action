@@ -56,7 +56,9 @@ for source in config["sources"]:
     json_res = qres.serialize(format="json")
     # load the json object into a python object
     json_res = json.loads(json_res)
+    objects_file = []
     for row in json_res["results"]["bindings"]:
+
         # print(row)
         # print(languages_to_fill)
         # print(source_language)
@@ -74,6 +76,13 @@ for source in config["sources"]:
         # process id so that it is a valid file name
         identifier = re.sub(r"[^a-zA-Z0-9]", "_", identifier_raw)
 
+        file_info = {
+            "file_name": f"{identifier}.yml",
+            "status": "recieved",
+            "branch": "main",
+        }
+        objects_file.append(file_info)
+
         # print(yml_text)
         # write the ouput to a file
         # location file is ../{source_name}/row["identifier"]["value"].yml
@@ -84,3 +93,32 @@ for source in config["sources"]:
             encoding="utf-8",
         ) as f:
             f.write(yml_text)
+
+    # write the objects_file to a file
+    # check if objects.json exists
+    if os.path.isfile(pathlib.Path(__file__).parent / f"../objects.json"):
+        with open(
+            pathlib.Path(__file__).parent / f"../objects.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            objects = json.load(f)
+            # check what files are already in the objects.json file and only add the new ones
+            existing_files = {obj["file_name"] for obj in objects}
+            for file in objects_file:
+                if file["file_name"] not in existing_files:
+                    objects.append(file)
+        with open(
+            pathlib.Path(__file__).parent / f"../objects.json",
+            "w",
+            encoding="utf-8",
+        ) as f:
+            json.dump(objects, f, indent=4)
+    else:
+        # make a new objects.json file and dump the objects_file in it
+        with open(
+            pathlib.Path(__file__).parent / f"../objects.json",
+            "w",
+            encoding="utf-8",
+        ) as f:
+            json.dump(objects_file, f, indent=4)
