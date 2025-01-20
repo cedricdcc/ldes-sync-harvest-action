@@ -65,9 +65,6 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
                 else
                     file_map["$filename"]="$file"
                 fi
-                else
-                    file_map["$filename"]="$file"
-                fi
             fi
         done < <(find . -type f -name "*.yml" -print0)
 
