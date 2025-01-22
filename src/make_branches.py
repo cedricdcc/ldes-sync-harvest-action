@@ -46,7 +46,7 @@ def create_branch(branch_name, files):
                     translation[key] = "to be filled in"
         with open(file, "w") as f:
             yaml.dump(yml, f)
-
+    subprocess.run(["git", "add", "."])
     subprocess.run(["git", "commit", "-m", f"made branch with yml files"])
     subprocess.run(["git", "push", "origin", branch_name])
 
