@@ -3,6 +3,7 @@ import subprocess
 from config_validation import load_config
 import pathlib
 import json
+import yaml
 
 # Configuration
 FOLDERS_TO_SEARCH = os.getcwd()
@@ -31,6 +32,21 @@ def create_branch(branch_name, files):
     subprocess.run(["git", "clean", "-fdx"])
 
     subprocess.run(["git", "checkout", "-b", branch_name])
+
+    # find the yml files in the files list
+    # open the files and change the translations to be filled in to "to fill in"
+
+    for file in files:
+        with open(file, "r") as f:
+            yml = yaml.safe_load(f)
+        for label in yml["labels"]:
+            for translation in label["translations"]:
+                # for each key change the value to "to be filled in"
+                for key in translation:
+                    translation[key] = "to be filled in"
+        with open(file, "w") as f:
+            yaml.dump(yml, f)
+
     subprocess.run(["git", "commit", "-m", f"made branch with yml files"])
     subprocess.run(["git", "push", "origin", branch_name])
 
