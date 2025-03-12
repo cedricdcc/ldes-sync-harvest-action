@@ -23,11 +23,7 @@ git config --global --add safe.directory /github/workspace
 # set user name and email 
 git config --global user.name 'GitHub Actions'
 git config --global user.email 'actions@github.com'
-# list all branches in the repository
-echo "All branches in the repository:"
-git fetch --all
-BRANCHES=$(git branch -a)
-echo "$BRANCHES"
+
 cd ../..
 cd src
 

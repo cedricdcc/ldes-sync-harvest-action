@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Echo the branches
-echo "Branches are: $BRANCHES"
+# list all branches in the repository
+echo "All branches in the repository:"
+git fetch --all
+BRANCHES=$(git branch -a)
+echo "$BRANCHES"
 
 # check if there is a branch called restricted/ldes in the branches
 if [[ $BRANCHES == *"restricted/ldes"* ]]; then
