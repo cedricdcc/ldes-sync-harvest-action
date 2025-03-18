@@ -36,14 +36,12 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     git fetch --all
     BRANCHES=$(git branch -r | sed 's/origin\///g' | tr '\n' ' ')
     echo "All branches: $BRANCHES"
-
-    # go over each branch and merge the changes
-    for branch in $BRANCHES; do
-        echo "Checking out branch: $branch"
-        git checkout "$branch"
-        git merge -X theirs restricted/ldes
-        git push origin "$branch"
-    done
+    # the logic to sync up must be here , but for now we will just print the branches
+    echo "merge here for getting all changes from the restricted/ldes branch into the main branch"
+    # the logic here should not be a plain merge into main since this will brake the whole system
+    # best to think about cherrypicking all the changes from the restricted/ldes branch into the main branch
+    # this is because the restricted/ldes branch will have the latest changes from the LDES data
+    # and the main branch will have the latest changes from the user
     
 else
     # no restricted/ldes branch exists
@@ -59,11 +57,11 @@ else
     git add .
     git commit -m "Syncing with LDES data"
     git push origin main
+    echo "Making branches"
+    python -u ../../src/make_branches.py
     git checkout -b restricted/ldes
     git add .
     git commit -m "Creating restricted/ldes branch"
     git push origin restricted/ldes
     git checkout main
-    echo "Making branches"
-    python -u ../../src/make_branches.py
 fi
