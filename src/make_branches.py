@@ -72,6 +72,7 @@ def main():
 
     subprocess.run(["git", "add", "objects.json"])
     subprocess.run(["git", "commit", "-m", "updated objects.json"])
+    subprocess.run(["git", "push", "origin", "main"])
 
     for i in range(0, len(yml_files), FILES_PER_BRANCH):
         branch_name = f"{BRANCH_PREFIX}{i // FILES_PER_BRANCH + 1}"
