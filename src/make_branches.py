@@ -28,9 +28,8 @@ def find_yml_files(folder):
 
 def create_branch(branch_name, files):
     subprocess.run(["git", "checkout", "main"])
-    subprocess.run(["git", "reset", "--hard"])
-    subprocess.run(["git", "clean", "-fdx"])
-
+    subprocess.run(["git", "restore", "."])
+    subprocess.run(["git", "clean", "-fd"])
     subprocess.run(["git", "checkout", "-b", branch_name])
 
     # find the yml files in the files list
