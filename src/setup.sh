@@ -62,7 +62,7 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     # do a sync from main to all the other batch-x branches so they are up to date with the main branch
     for branch in $(git branch -a | grep "batch-[0-9]\+"); do
         git checkout $branch
-        git merge -X theirs main
+        git merge --allow-unrelated-histories -X theirs main
         git push origin $branch
     done
 
