@@ -61,8 +61,9 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     # now that the main branch is ahead of all the batch-x branches
     # do a sync from main to all the other batch-x branches so they are up to date with the main branch
     for branch in $(git branch -a | grep "batch-[0-9]\+"); do
-        git checkout $branch
-        git merge --allow-unrelated-histories -X theirs main
+        git checkout origin $branch
+        git fetch origin
+        git merge -X theirs origin/main
         git push origin $branch
     done
 
