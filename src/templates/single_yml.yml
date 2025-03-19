@@ -5,7 +5,6 @@
      - languages: eg(['fr', 'es'])
      - source_items: eg([{'name': 'definition', 'path': 'http://www.w3.org/2004/02/skos/core#definition'}, {'name': 'altLabel', 'path': 'http://www.w3.org/2004/02/skos/core#altLabel'}])
 #}
-uri: "{{ row.identifier.value }}"
 labels:
   {%- for key, value in row.items() -%}
   {%-for source_item in source_items -%}
@@ -20,3 +19,4 @@ labels:
   {%- endif -%}
   {%- endfor -%}
   {%- endfor -%}
+uri: "{{ row.identifier.value }}"

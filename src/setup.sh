@@ -49,7 +49,6 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     NEW_BATCH=$((BATCH + 1))
     echo "New batch would be batch-$NEW_BATCH if merged files exist"
     MERGED=$(grep -o '"status": "merged"' objects.json)
-    cd src
     git add .
     git commit -m "Update YML files from parent changes and update objects.json"
     git push origin main
