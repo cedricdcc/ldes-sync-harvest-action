@@ -7,6 +7,7 @@ from pyrdfj2 import J2RDFSyntaxBuilder
 import rdflib
 import re
 import json
+import yaml
 
 CONFIG_LOCATION = pathlib.Path(__file__).parent / "../config.yml"
 QUERYBUILDER = J2RDFSyntaxBuilder(
@@ -122,3 +123,15 @@ for source in config["sources"]:
             encoding="utf-8",
         ) as f:
             json.dump(objects_file, f, indent=4)
+
+# in the end go over all yml files created , and parse and write them again
+# to make sure they are correctly formatted
+for source in config["sources"]:
+    source_name = source["name"]
+    for file in os.listdir(pathlib.Path(__file__).parent / f"../{source_name}"):
+        if file.endswith(".yml"):
+            file_path = pathlib.Path(__file__).parent / f"../{source_name}" / file
+            with open(file_path, "r") as f:
+                yml_data = yaml.safe_load(f)
+            with open(file_path, "w") as f:
+                yaml.dump(yml_data, f, allow_unicode=True)
