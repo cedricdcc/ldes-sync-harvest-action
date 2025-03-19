@@ -18,5 +18,5 @@ labels:
   {%- endfor -%}
   {%- endif -%}
   {%- endfor -%}
-  {%- endfor -%}
+  {%- endfor %}
 uri: "{{ row.identifier.value }}"
