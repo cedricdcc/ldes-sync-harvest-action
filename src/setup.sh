@@ -27,6 +27,7 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     echo "Comparing 'original' fields between local and parent YML files..."
     for file in $(find ../../ -name "*.yml"); do
         base=$(basename "$file")
+        echo "Processing $base..."
         if [ -f "$base" ]; then
             diff_val=$(grep 'original:' "$base")
             parent_val=$(grep 'original:' "$file")
@@ -36,18 +37,40 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
             fi
         fi
     done
-    echo "Parsing objects.json for merged files..."
+
+    # Check for YML files in ../../ without duplicates in ./github/workspace/{base}
+    echo "Checking for YML files without duplicates..."
+    NEW_BRANCH_BOOL=0
+    for file in $(find ../../ -name "*.yml"); do
+        base=$(basename "$file")
+        if [ ! -f "./github/workspace/$base" ]; then
+            echo "Copying $file to ./github/workspace/$base"
+            cp "$file" "./github/workspace/$base"
+            echo "Adding $base to objects.json under new batch"
+            # Update objects.json with new batch entry
+            BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
+            NEW_BATCH=$((BATCH + 1))
+            jq --arg file "$base" --arg batch "batch-$NEW_BATCH" '.batches += [{"file": $file, "batch": $batch}]' objects.json > temp.json && mv temp.json objects.json
+            NEW_BRANCH_BOOL=1
+        fi
+    done
     BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
-    NEW_BATCH=$((BATCH + 1))
-    echo "New batch would be batch-$NEW_BATCH if merged files exist"
+    if [ $NEW_BRANCH_BOOL -eq 1 ]; then
+        echo "New batch would be batch-$NEW_BATCH if new files exist"
+    else
+        echo "No new files to add to objects.json"
+        NEW_BATCH=$((BATCH + 1))
+    fi
     MERGED=$(grep -o '"status": "merged"' objects.json)
     git add .
     git commit -m "Update YML files from parent changes and update objects.json"
     git push origin main
-    if [ ! -z "$MERGED" ]; then
+    if [ $NEW_BRANCH_BOOL -eq 1 ]; then
+        echo "Merged files or new files exist, creating new branch batch-$NEW_BATCH"
         git checkout -b batch-$NEW_BATCH
         git push origin batch-$NEW_BATCH
         git checkout main
+        echo "Creating batch-$NEW_BATCH branch"
     fi
 
     # now that the main branch is ahead of all the batch-x branches
