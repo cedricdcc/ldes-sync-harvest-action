@@ -41,19 +41,19 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     # Check for YML files in ../../ without duplicates in ./github/workspace/{base}
     echo "Checking for YML files without duplicates..."
     NEW_BRANCH_BOOL=0
-    for file in $(find ../../ -name "*.yml"); do
-        base=$(basename "$file")
-        if [ ! -f "./github/workspace/$base" ]; then
-            echo "Copying $file to ./github/workspace/$base"
-            cp "$file" "./github/workspace/$base"
-            echo "Adding $base to objects.json under new batch"
-            # Update objects.json with new batch entry
-            BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
-            NEW_BATCH=$((BATCH + 1))
-            jq --arg file "$base" --arg batch "batch-$NEW_BATCH" '.batches += [{"file": $file, "batch": $batch}]' objects.json > temp.json && mv temp.json objects.json
-            NEW_BRANCH_BOOL=1
-        fi
-    done
+    #for file in $(find ../../ -name "*.yml"); do
+    #    base=$(basename "$file")
+    #    if [ ! -f "./github/workspace/$base" ]; then
+    #        echo "Copying $file to ./github/workspace/$base"
+    #        cp "$file" "./github/workspace/$base"
+    #        echo "Adding $base to objects.json under new batch"
+    #        # Update objects.json with new batch entry
+    #        BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
+    #        NEW_BATCH=$((BATCH + 1))
+    #        jq --arg file "$base" --arg batch "batch-$NEW_BATCH" '.batches += [{"file": $file, "batch": $batch}]' objects.json > temp.json && mv temp.json objects.json
+    #        NEW_BRANCH_BOOL=1
+    #    fi
+    #done
     BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
     if [ $NEW_BRANCH_BOOL -eq 1 ]; then
         echo "New batch would be batch-$NEW_BATCH if new files exist"
