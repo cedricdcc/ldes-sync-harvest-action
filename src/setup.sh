@@ -22,65 +22,8 @@ if [[ $BRANCHES == *"restricted/ldes"* ]]; then
     python -u ttl_to_yml.py
     cd .. 
     cd ./github/workspace
-    git checkout main
-    echo "Locating YML files in the repository and parent folder..."
-    echo "Comparing 'original' fields between local and parent YML files..."
-    for file in $(find ../../ -name "*.yml"); do
-        base=$(basename "$file")
-        echo "Processing $base..."
-        if [ -f "$base" ]; then
-            diff_val=$(grep 'original:' "$base")
-            parent_val=$(grep 'original:' "$file")
-            if [ "$diff_val" != "$parent_val" ]; then
-                cp "$file" "$base"
-                echo "Updated $base with parent version in branch $branch"
-            fi
-        fi
-    done
-
-    # Check for YML files in ../../ without duplicates in ./github/workspace/{base}
-    echo "Checking for YML files without duplicates..."
-    NEW_BRANCH_BOOL=0
-    #for file in $(find ../../ -name "*.yml"); do
-    #    base=$(basename "$file")
-    #    if [ ! -f "./github/workspace/$base" ]; then
-    #        echo "Copying $file to ./github/workspace/$base"
-    #        cp "$file" "./github/workspace/$base"
-    #        echo "Adding $base to objects.json under new batch"
-    #        # Update objects.json with new batch entry
-    #        BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
-    #        NEW_BATCH=$((BATCH + 1))
-    #        jq --arg file "$base" --arg batch "batch-$NEW_BATCH" '.batches += [{"file": $file, "batch": $batch}]' objects.json > temp.json && mv temp.json objects.json
-    #        NEW_BRANCH_BOOL=1
-    #    fi
-    #done
-    BATCH=$(grep -o '"branch": "batch-[0-9]\+"' objects.json | sed "s/[^0-9]//g" | sort -n | tail -n 1)
-    if [ $NEW_BRANCH_BOOL -eq 1 ]; then
-        echo "New batch would be batch-$NEW_BATCH if new files exist"
-    else
-        echo "No new files to add to objects.json"
-        NEW_BATCH=$((BATCH + 1))
-    fi
-    MERGED=$(grep -o '"status": "merged"' objects.json)
-    git add .
-    git commit -m "Update YML files from parent changes and update objects.json"
-    git push origin main
-    if [ $NEW_BRANCH_BOOL -eq 1 ]; then
-        echo "Merged files or new files exist, creating new branch batch-$NEW_BATCH"
-        git checkout -b batch-$NEW_BATCH
-        git push origin batch-$NEW_BATCH
-        git checkout main
-        echo "Creating batch-$NEW_BATCH branch"
-    fi
-
-    # now that the main branch is ahead of all the batch-x branches
-    # do a sync from main to all the other batch-x branches so they are up to date with the main branch
-    #for branch in $(git branch -a | grep "batch-[0-9]\+"); do
-    #    git checkout origin $branch
-    #    git fetch origin
-    #    git merge -X theirs origin/main
-    #    git push origin $branch
-    #done
+    python -u ../../src/sync.py
+    
 
 else
     # no restricted/ldes branch exists
